@@ -1,8 +1,11 @@
 # IntelliJ IDEA
 .idea/
+.vscode/
+.deepeval/
 *.iml
 *.iws
 *.ipr
+.DS_Store
 
 # Python
 *.pyc
