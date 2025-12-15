@@ -5,9 +5,10 @@ from deepeval.metrics import GEval
 
 from openaitestclient import OpenAITestClient
 
+openai_client = OpenAITestClient()
+evaluation_model = GPTModel(model = "gpt-4o")
+
 def test_basic_response():
-    openai_client = OpenAITestClient()
-    evaluation_model = GPTModel(model = "gpt-4o")
     prompt = "Hello, how are you?"
     response_text = openai_client.generate(prompt)
 
@@ -25,8 +26,6 @@ def test_basic_response():
 
 
 def test_instruction_following():
-    openai_client = OpenAITestClient()
-    evaluation_model = GPTModel(model = "gpt-4o")
     prompt = "Name three colors. Just list of colors"
     response_text = openai_client.generate(prompt)
 
@@ -44,8 +43,6 @@ def test_instruction_following():
 
 
 def test_simple_qa():
-    openai_client = OpenAITestClient()
-    evaluation_model = GPTModel(model = "gpt-4o")
     prompt = "What is the capital of France?"
     response_text = openai_client.generate(prompt)
 
