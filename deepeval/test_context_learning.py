@@ -24,6 +24,7 @@ def test_logical_consistency():
             2. Assess the overlap in key information provided in both answers.
             3. No contradictions should be present.
             4. Ensure that both answers do not contradict each other.
+            5. Provide sufficient explanation(not just "I don't know").
             Award full points if the responses are logically consistent and refer to the same facts.
             """,
             evaluation_params=[LLMTestCaseParams.INPUT, LLMTestCaseParams.ACTUAL_OUTPUT],
@@ -42,3 +43,35 @@ def test_logical_consistency():
             )
 
         assert_test(test_case, [consistency_metric])
+
+
+def test_error_handling():
+
+    error_inputs= [
+        "What is the color of silence?",
+        "How many corners does a circle have"
+    ]
+
+    for prompt in error_inputs:
+        response_text = openai_client.generate(prompt)
+
+        error_handling_metric = GEval(
+            name = "Error Handling", 
+            criteria="""Evaluate how well the model handles nonsensical or unanswerable questions.
+            1. Check if the response acknowledges the ambiguity or impossibility of the question.
+            2. Assess whether the model refrains from providing incorrect or fabricated information.
+            3. Look for polite refusals or requests for clarification.
+            Award full points if the response appropriately addresses the nonsensical nature of the input.
+            """,
+            evaluation_params=[LLMTestCaseParams.INPUT, LLMTestCaseParams.ACTUAL_OUTPUT],
+            threshold=0.75,
+            model = evaluation_model
+            )  
+
+        test_case = LLMTestCase(input=prompt, actual_output=response_text["text"])
+             
+        
+        print("Testing prompt:", prompt)
+        print("Response:", response_text["text"])
+        assert_test(test_case, [error_handling_metric])
+
