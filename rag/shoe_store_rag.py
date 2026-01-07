@@ -141,21 +141,20 @@ class ShoeStoreRAG:
     def generate_answer(self, query, context):
         context_str = "\n\n".join(context)
 
-        prompt = f"""You are a helpful customer service assistant for a shoe store. Use the following context to answer the customer's question.
+        system_message = "You are a helpful customer service assistant for a shoe store. Use the following context to answer the customer's question."
 
-        Context:
+        user_message = f"""Context:
         {context_str}
 
-        Customer Question: {query}
-
-        Please provide a concise and accurate answer based on the above context."""
+        Customer Question: 
+        {query}"""
 
         response = self.openai_client.chat.completions.create(
             model="gpt-4o",
-            messages=[
-                {"role": "system", "content": "You are a helpful customer service assistant."},
-                {"role": "user", "content": prompt}
-            ],
+        messages=[
+            {"role": "system", "content": system_message},
+            {"role": "user", "content": user_message}
+        ],
             max_tokens=300,
             temperature=0.7
         )
